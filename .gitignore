@@ -5,14 +5,17 @@ src/colmap/util/version.cc
 CMakeUserPresets.json
 .clangd
 compile_commands.json
+opencode.json
 
 # Custom directories
 .idea/
 .vscode
+.devcontainer
 .vs
 .DS_Store
 .cache
 build*/
+colmap_workspace/
 install*/
 data/
 benchmark/reconstruction/data/
