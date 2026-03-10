@@ -27,28 +27,32 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#pragma once
-
-#if defined(COLMAP_HIP_ENABLED)
-#include "colmap/mvs/gpu_mat.hip.h"
-#else
-#include "colmap/mvs/gpu_mat.h"
-#endif
+#include "colmap/mvs/gpu_mat_prng.h"
 
 namespace colmap {
 namespace mvs {
+namespace {
 
-#if defined(COLMAP_HIP_ENABLED)
-class GpuMatPRNG : public GpuMat<hiprandState> {
-#else
-class GpuMatPRNG : public GpuMat<curandState> {
-#endif
- public:
-  GpuMatPRNG(const int width, const int height);
+__global__ void InitRandomStateKernel(GpuMatView<hiprandState> output) {
+  const size_t row = blockIdx.y * blockDim.y + threadIdx.y;
+  const size_t col = blockIdx.x * blockDim.x + threadIdx.x;
 
- private:
-  void InitRandomState();
-};
+  const size_t uniqueBlockIndex = blockIdx.y * gridDim.x + blockIdx.x;
+  const size_t id = uniqueBlockIndex * blockDim.y * blockDim.x +
+                    threadIdx.y * blockDim.x + threadIdx.x;
+
+  // Each thread gets same seed, a different sequence number, no offset.
+  if (col < output.GetWidth() && row < output.GetHeight()) {
+    hiprand_init(id, 0, 0, &output.GetRef(row, col));
+  }
+}
+
+}  // namespace
+
+GpuMatPRNG::GpuMatPRNG(const int width, const int height)
+    : GpuMat(width, height) {
+  InitRandomStateKernel<<<gridSize_, blockSize_>>>(View());
+}
 
 }  // namespace mvs
 }  // namespace colmap

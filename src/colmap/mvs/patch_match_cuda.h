@@ -29,9 +29,14 @@
 
 #pragma once
 
+#if defined(COLMAP_HIP_ENABLED)
+#include "colmap/mvs/cuda_texture.hip.h"
+#include "colmap/mvs/gpu_mat.hip.h"
+#else
 #include "colmap/mvs/cuda_texture.h"
-#include "colmap/mvs/depth_map.h"
 #include "colmap/mvs/gpu_mat.h"
+#endif
+#include "colmap/mvs/depth_map.h"
 #include "colmap/mvs/gpu_mat_prng.h"
 #include "colmap/mvs/gpu_mat_ref_image.h"
 #include "colmap/mvs/image.h"
@@ -42,7 +47,11 @@
 #include <memory>
 #include <vector>
 
+#if defined(COLMAP_HIP_ENABLED)
+#include <hip/hip_runtime.h>
+#else
 #include <cuda_runtime.h>
+#endif
 
 namespace colmap {
 namespace mvs {

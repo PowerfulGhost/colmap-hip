@@ -78,8 +78,7 @@ if(HIP_ENABLED)
     target_link_libraries(colmap_controllers
         PRIVATE
             colmap_util_hip
-            # TODO
-            # colmap_mvs_cuda
+            colmap_mvs_hip
     )
 endif()
 

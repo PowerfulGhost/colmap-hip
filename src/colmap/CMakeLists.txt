@@ -63,7 +63,7 @@ if(HIP_ENABLED)
 
     # Use a separate stream per thread to allow for concurrent kernel execution
     # between multiple threads on the same device.
-    set(CMAKE_HIP_FLAGS "${CMAKE_HIP_FLAGS} --default-stream per-thread")
+    set(CMAKE_HIP_FLAGS "${CMAKE_HIP_FLAGS} -fgpu-default-stream=per-thread")
 
     # Suppress warnings:
     # ptxas warning: Stack size for entry function X cannot be statically determined.

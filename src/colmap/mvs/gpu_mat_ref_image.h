@@ -29,8 +29,13 @@
 
 #pragma once
 
+#if defined(COLMAP_HIP_ENABLED)
+#include "colmap/mvs/cuda_texture.hip.h"
+#include "colmap/mvs/gpu_mat.hip.h"
+#else
 #include "colmap/mvs/cuda_texture.h"
 #include "colmap/mvs/gpu_mat.h"
+#endif
 
 #include <memory>
 
