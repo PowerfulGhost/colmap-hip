@@ -54,8 +54,20 @@ if(CUDA_ENABLED)
     set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} --default-stream per-thread")
 
     # Suppress warnings:
-    # ptxas warning : Stack size for entry function X cannot be statically determined.
+    # ptxas warning: Stack size for entry function X cannot be statically determined.
     set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -Xptxas=-suppress-stack-size-warning")
+endif()
+
+if(HIP_ENABLED)
+    set(CMAKE_HIP_FLAGS "${CMAKE_HIP_FLAGS} -ffast-math")
+
+    # Use a separate stream per thread to allow for concurrent kernel execution
+    # between multiple threads on the same device.
+    set(CMAKE_HIP_FLAGS "${CMAKE_HIP_FLAGS} --default-stream per-thread")
+
+    # Suppress warnings:
+    # ptxas warning: Stack size for entry function X cannot be statically determined.
+    set(CMAKE_HIP_FLAGS "${CMAKE_HIP_FLAGS} -Wno-deprecated-gpu-targets")
 endif()
 
 if(COVERAGE_ENABLED)

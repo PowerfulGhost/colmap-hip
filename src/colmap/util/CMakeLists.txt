@@ -93,6 +93,18 @@ if(CUDA_ENABLED)
     )
 endif()
 
+if(HIP_ENABLED)
+    COLMAP_ADD_LIBRARY(
+        NAME colmap_util_hip
+        SRCS
+            hip.h hip.cc
+            hipcc.h hipcc.cc
+        PUBLIC_LINK_LIBS
+            colmap_util
+            hip::hip_runtime
+    )
+endif()
+
 if(TESTS_ENABLED)
     target_sources(
         colmap_util

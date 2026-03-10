@@ -38,6 +38,7 @@ option(SIMD_ENABLED "Whether to enable SIMD optimizations" ON)
 option(OPENMP_ENABLED "Whether to enable OpenMP parallelization" ON)
 option(IPO_ENABLED "Whether to enable interprocedural optimization" ON)
 option(CUDA_ENABLED "Whether to enable CUDA, if available" ON)
+option(HIP_ENABLED "Whether to enable HIP (ROCm), if available" OFF)
 option(ONNX_ENABLED "Whether to enable ONNX, if available" ON)
 option(GUI_ENABLED "Whether to enable the graphical UI" ON)
 option(OPENGL_ENABLED "Whether to enable OpenGL, if available" ON)
@@ -70,6 +71,9 @@ endif()
 if(CUDA_ENABLED)
     list(APPEND VCPKG_MANIFEST_FEATURES "cuda")
 endif()
+if(HIP_ENABLED)
+    list(APPEND VCPKG_MANIFEST_FEATURES "hip")
+endif()
 if(ONNX_ENABLED AND NOT FETCH_ONNX)
     list(APPEND VCPKG_MANIFEST_FEATURES "onnx")
 endif()
@@ -90,8 +94,18 @@ set(COLMAP_VERSION "3.14.0.dev0")
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CUDA_STANDARD 17)
-set(CMAKE_CUDA_STANDARD_REQUIRED ON)
+if(CUDA_ENABLED)
+    set(CMAKE_CUDA_STANDARD 17)
+    set(CMAKE_CUDA_STANDARD_REQUIRED ON)
+endif()
+if(HIP_ENABLED)
+    set(CMAKE_HIP_STANDARD 17)
+    set(CMAKE_HIP_STANDARD_REQUIRED ON)
+endif()
+
+if(CUDA_ENABLED AND HIP_ENABLED)
+    message(FATAL_ERROR "Cannot enable both CUDA and HIP simultaneously. Please choose one.")
+endif()
 
 set_property(GLOBAL PROPERTY GLOBAL_DEPENDS_NO_CYCLES ON)
 
@@ -423,6 +437,12 @@ if(CUDA_ENABLED)
     list(APPEND COLMAP_EXPORT_LIBS
          colmap_util_cuda
          colmap_mvs_cuda
+    )
+endif()
+if(HIP_ENABLED)
+    list(APPEND COLMAP_EXPORT_LIBS
+         colmap_util_hip
+         colmap_mvs_hip
     )
 endif()
 if(GPU_ENABLED)
