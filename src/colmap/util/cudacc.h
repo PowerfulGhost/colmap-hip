@@ -31,7 +31,11 @@
 
 #include <string>
 
+#if defined(COLMAP_HIP_ENABLED)
+#include <hip/hip_runtime.h>
+#else
 #include <cuda_runtime.h>
+#endif  // COLMAP_HIP_ENABLED
 
 #define CUDA_SAFE_CALL(error) CudaSafeCall(error, __FILE__, __LINE__)
 #define CUDA_CHECK() CudaCheck(__FILE__, __LINE__)
@@ -47,14 +51,25 @@ class CudaTimer {
   void Print(const std::string& message);
 
  private:
+#if defined(COLMAP_HIP_ENABLED)
+  hipEvent_t start_;
+  hipEvent_t stop_;
+#else
   cudaEvent_t start_;
   cudaEvent_t stop_;
+#endif  // COLMAP_HIP_ENABLED
   float elapsed_time_;
 };
 
+#if defined(COLMAP_HIP_ENABLED)
+void CudaSafeCall(const hipError_t error,
+                  const std::string& file,
+                  const int line);
+#else
 void CudaSafeCall(const cudaError_t error,
                   const std::string& file,
                   const int line);
+#endif  // COLMAP_HIP_ENABLED
 
 void CudaCheck(const char* file, const int line);
 void CudaSyncAndCheck(const char* file, const int line);

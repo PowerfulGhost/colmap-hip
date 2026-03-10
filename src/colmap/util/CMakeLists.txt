@@ -97,11 +97,11 @@ if(HIP_ENABLED)
     COLMAP_ADD_LIBRARY(
         NAME colmap_util_hip
         SRCS
-            hip.h hip.cc
-            hipcc.h hipcc.cc
+            cuda.h hip.cc
+            cudacc.h hipcc.cc
         PUBLIC_LINK_LIBS
             colmap_util
-            hip::hip_runtime
+            hip::host
     )
 endif()
 

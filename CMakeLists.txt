@@ -442,7 +442,7 @@ endif()
 if(HIP_ENABLED)
     list(APPEND COLMAP_EXPORT_LIBS
          colmap_util_hip
-         colmap_mvs_hip
+         # TODO: colmap_mvs_hip
     )
 endif()
 if(GPU_ENABLED)
