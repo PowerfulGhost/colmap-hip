@@ -1,6 +1,6 @@
 # Colmap-HIP
 
-[Original README](README.md.orig)
+[Original README](ORIGINAL_README.md)
 
 ## Description
 
