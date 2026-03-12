@@ -117,7 +117,11 @@ class AutomaticReconstructionController : public Thread {
 
     // Whether to use the GPU in feature extraction, feature matching, and
     // bundle adjustment.
+#if defined(COLMAP_HIP_ENABLED)
+    bool use_gpu = false;  // SiftGPU can't run on AMD GPUs
+#else
     bool use_gpu = true;
+#endif
 
     // Index of the GPU used for GPU stages. For multi-GPU computation in
     // feature extraction/matching, you should separate multiple GPU indices by
