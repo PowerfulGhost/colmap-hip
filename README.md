@@ -48,7 +48,7 @@ mkdir colmap-hip/build
 # Configure
 cd colmap-hip/build
 export CMAKE_PREFIX_PATH=/opt/rocm  # Replace with your rocm installation directory
-cmake .. -GNinja -DHIP_ENABLED=ON -DCUDA_ENABLED=OFF
+cmake .. -GNinja -DHIP_ENABLED=ON -DCUDA_ENABLED=OFF -DCMAKE_BUILD_TYPE=RelWithDebInfo
 
 # Compile and install
 ninja
@@ -60,7 +60,10 @@ Basically the same as the original colmap.
 Use `HIP_VISIBLE_DEVICES` environment variable to specify which GPU(s) to use.
 
 ## Known Issues
-SiftGPU is not supported by AMD gpus. Not sure why. Set use_gpu=0 to use SiftCPU instead (MVS still using GPU).
+| Issue | Cause | Walkaround | 
+| --- | --- | --- |
+| Possion recon fails with `Release` build type in docker container | Not sure why | Set build type to `CMAKE_BUILD_TYPE=RelWithDebInfo` |
+| SiftGPU is not supported by AMD gpus in docker container | Not sure why | Set use_gpu=0 to use SiftCPU instead (MVS still using GPU) |
 
 ---
 
