@@ -62,4 +62,6 @@ Use `HIP_VISIBLE_DEVICES` environment variable to spicify which GPU(s) to use.
 ## Known Issues
 SiftGPU is not supported by AMD gpus. Not sure why. Set use_gpu=0 to use SiftCPU instead (MVS still using GPU).
 
-## If you find this project helpful, please consider giving it a star ⭐. Thank you!
+---
+
+**If you find this project helpful, please consider giving it a star ⭐. Thank you!**
