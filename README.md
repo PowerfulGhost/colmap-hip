@@ -57,7 +57,7 @@ sudo ninja install  # Optional
 
 ## Usage
 Basically the same as the original colmap.
-Use `HIP_VISIBLE_DEVICES` environment variable to spicify which GPU(s) to use.
+Use `HIP_VISIBLE_DEVICES` environment variable to specify which GPU(s) to use.
 
 ## Known Issues
 SiftGPU is not supported by AMD gpus. Not sure why. Set use_gpu=0 to use SiftCPU instead (MVS still using GPU).
